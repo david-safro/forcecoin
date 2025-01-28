@@ -41,10 +41,10 @@ struct Wallet {
 }
 fn wallet() -> Wallet{
     let rng = SystemRandom::new();
-    let private_key = Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
+    let mut private_key = Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
     let key_pair = Ed25519KeyPair::from_pkcs8(private_key.as_ref()).unwrap();
     let public_key = hex::encode(key_pair.public_key().as_ref());
 
-    let private_key1 = hex::encode(private_key.as_ref());
-    Wallet{private_key1, public_key}
+    private_key = hex::encode(private_key.as_ref());
+    Wallet{private_key, public_key}
 }
