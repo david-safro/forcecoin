@@ -1,37 +1,49 @@
-use chrono::Utc;
-use ring::digest::{Context, SHA256, Digest};
+use crate::transaction::Transaction;
 use serde::{Serialize, Deserialize};
+use chrono::Utc;
+use ring::digest::{Context, SHA256};
+use hex;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Block {
     pub index: u64,
     pub timestamp: String,
-    pub data: String,
+    pub transactions: Vec<Transaction>,
     pub previous_hash: String,
     pub hash: String,
+    pub nonce: u64,
 }
 
 impl Block {
-    pub fn new(index: u64, data: String, previous_hash: String) -> Self {
+    pub fn new(index: u64, transactions: Vec<Transaction>, previous_hash: String) -> Self {
         let timestamp = Utc::now().to_rfc3339();
-        let hash = Block::calculate_hash(index, &timestamp, &data, &previous_hash);
-
         Block {
             index,
             timestamp,
-            data,
+            transactions,
             previous_hash,
-            hash,
+            hash: String::new(),
+            nonce: 0,
         }
     }
 
-    pub fn calculate_hash(index: u64, timestamp: &str, data: &str, previous_hash: &str) -> String {
+    pub fn calculate_hash(&self) -> String {
         let mut context = Context::new(&SHA256);
-        context.update(index.to_string().as_bytes());
-        context.update(timestamp.as_bytes());
-        context.update(data.as_bytes());
-        context.update(previous_hash.as_bytes());
+        context.update(self.index.to_string().as_bytes());
+        context.update(self.timestamp.as_bytes());
+        context.update(serde_json::to_string(&self.transactions).unwrap().as_bytes());
+        context.update(self.previous_hash.as_bytes());
+        context.update(self.nonce.to_string().as_bytes());
         let digest = context.finish();
         hex::encode(digest.as_ref())
+    }
+
+    pub fn mine_block(&mut self, difficulty: usize) {
+        let prefix = "0".repeat(difficulty);
+        while !self.hash.starts_with(&prefix) {
+            self.nonce += 1;
+            self.hash = self.calculate_hash();
+        }
+        println!("Block mined: {}", self.hash);
     }
 }
