@@ -2,6 +2,7 @@ mod block;
 mod blockchain;
 mod transaction;
 mod p2p;
+mod node;
 
 use blockchain::Blockchain;
 use transaction::Transaction;
