@@ -1,5 +1,5 @@
 [package]
-name = "blockchain"
+name = "forcecoin"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,3 +10,6 @@ hex = "0.4"
 ring = "0.17.8"
 serde_json = "1.0.137"
 
+[[bin]]
+name = "forcecoin"
+path = "backend/blockchain/blockchain/src/main.rs"

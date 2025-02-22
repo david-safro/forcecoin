@@ -6,6 +6,7 @@ pub struct Blockchain {
     pub difficulty: usize,
     pub pending_transactions: Vec<Transaction>,
     pub mining_reward: f64,
+    pub target_timestamp: u64,
 }
 
 impl Blockchain {
@@ -13,12 +14,12 @@ impl Blockchain {
         let mut chain = Vec::new();
         let genesis_block = Block::new(0, vec![], "0".to_string());
         chain.push(genesis_block);
-
         Blockchain {
             chain,
             difficulty,
             pending_transactions: Vec::new(),
             mining_reward,
+            target_timestamp: 300,
         }
     }
 
@@ -29,7 +30,19 @@ impl Blockchain {
             println!("Invalid transaction! Ignored.");
         }
     }
+    pub fn dynamic_difficulty(&mut self) -> usize{
+        let start_time =  self.chain.first().unwrap().timestamp1.clone();
+        let end_time =  self.chain.last().unwrap().timestamp1.clone();
+        let elapsed = end_time - start_time;
+        if elapsed < self.target_timestamp{
+            self.difficulty = self.difficulty.saturating_add(1);
+        }
+        else if elapsed > self.target_timestamp {
+            self.difficulty = self.difficulty.saturating_sub(1);
+        }
 
+        return self.difficulty;
+    }
     pub fn mine_pending_transactions(&mut self, miner_address: String) {
         let reward_transaction = Transaction {
             sender: "0".to_string(),
@@ -44,6 +57,7 @@ impl Blockchain {
         let previous_hash = self.chain.last().unwrap().hash.clone();
         let mut block = Block::new(self.chain.len() as u64, transactions, previous_hash);
 
+        self.difficulty = self.dynamic_difficulty();
         block.mine_block(self.difficulty);
         self.chain.push(block);
 

@@ -10,7 +10,7 @@ pub struct Node {
 
 impl Node {
     pub fn new() -> Self {
-        let blockchain = Arc::new(Mutex::new(Blockchain::new()));
+        let blockchain = Arc::new(Mutex::new(Blockchain::new(2, 3.0)));
         Node { blockchain }
     }
 

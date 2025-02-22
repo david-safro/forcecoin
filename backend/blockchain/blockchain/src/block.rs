@@ -8,6 +8,7 @@ use hex;
 pub struct Block {
     pub index: u64,
     pub timestamp: String,
+    pub timestamp1: u64,
     pub transactions: Vec<Transaction>,
     pub previous_hash: String,
     pub hash: String,
@@ -17,9 +18,11 @@ pub struct Block {
 impl Block {
     pub fn new(index: u64, transactions: Vec<Transaction>, previous_hash: String) -> Self {
         let timestamp = Utc::now().to_rfc3339();
+        let timestamp1 = Utc::now().timestamp().to_string().parse::<u64>().unwrap();
         Block {
             index,
             timestamp,
+            timestamp1,
             transactions,
             previous_hash,
             hash: String::new(),
@@ -31,6 +34,7 @@ impl Block {
         let mut context = Context::new(&SHA256);
         context.update(self.index.to_string().as_bytes());
         context.update(self.timestamp.as_bytes());
+        context.update(self.timestamp1.to_string().as_bytes());
         context.update(serde_json::to_string(&self.transactions).unwrap().as_bytes());
         context.update(self.previous_hash.as_bytes());
         context.update(self.nonce.to_string().as_bytes());

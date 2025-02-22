@@ -34,17 +34,17 @@ fn main() {
 
     println!("Blockchain: {:?}", blockchain.chain);
 }
-//NOT FULLY DEBUGGED
+
 struct Wallet {
     private_key : String,
     public_key: String,
 }
 fn wallet() -> Wallet{
     let rng = SystemRandom::new();
-    let mut private_key = Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
-    let key_pair = Ed25519KeyPair::from_pkcs8(private_key.as_ref()).unwrap();
+    let private_key_encoded = Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
+    let key_pair = Ed25519KeyPair::from_pkcs8(private_key_encoded.as_ref()).unwrap();
     let public_key = hex::encode(key_pair.public_key().as_ref());
 
-    private_key = hex::encode(private_key.as_ref());
+    let private_key = hex::encode(private_key_encoded.as_ref());
     Wallet{private_key, public_key}
 }
