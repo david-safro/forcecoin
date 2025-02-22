@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use ring::signature::{KeyPair, Ed25519KeyPair, Signature, UnparsedPublicKey};
+use ring::signature::{Ed25519KeyPair, UnparsedPublicKey};
 use hex;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

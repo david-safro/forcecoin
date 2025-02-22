@@ -3,12 +3,13 @@ mod blockchain;
 mod transaction;
 mod p2p;
 mod node;
+mod coin;
 
 use blockchain::Blockchain;
 use transaction::Transaction;
 use ring::signature::{Ed25519KeyPair, KeyPair};
 use ring::rand::SystemRandom;
-use std::sync::{Arc, Mutex};
+
 
 fn generate_keys() -> (String, Ed25519KeyPair) {
     let rng = SystemRandom::new();
@@ -35,16 +36,4 @@ fn main() {
     println!("Blockchain: {:?}", blockchain.chain);
 }
 
-struct Wallet {
-    private_key : String,
-    public_key: String,
-}
-fn wallet() -> Wallet{
-    let rng = SystemRandom::new();
-    let private_key_encoded = Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
-    let key_pair = Ed25519KeyPair::from_pkcs8(private_key_encoded.as_ref()).unwrap();
-    let public_key = hex::encode(key_pair.public_key().as_ref());
 
-    let private_key = hex::encode(private_key_encoded.as_ref());
-    Wallet{private_key, public_key}
-}
