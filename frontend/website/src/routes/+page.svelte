@@ -27,14 +27,14 @@
     header {
         background-color: #0066cc; /* Blue header */
         color: white;
-        padding: 20px 0px;
+        padding: 30px 0px;
         font-size: 32px;
         font-weight: bold;
     }
 
     .forcecoin-section {
         background-color: white; /* White background */
-        padding: 40px;
+        padding: 300px;
         margin-top: 20px;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -56,19 +56,23 @@
 
     footer {
         margin-top: 30px;
-        padding: 10px;
+        padding: 15px;
         background-color: #0066cc; /* Blue footer */
         color: white;
     }
 
     /* Button */
     .btn {
+
+
         background-color: #0066cc;
         color: white;
-        padding: 10px 20px;
+        padding: 10px 60px;
         border-radius: 10px;
         text-decoration: none ;
         font-weight: bold;
+        position: relative;
+        top: 50px;
     }
 
     .btn:hover {
@@ -89,7 +93,9 @@
             {description}
         </div>
 
-        <a href="#" class="btn">Learn More</a>
+        <a href="/learn-more" class="btn">
+            <button>Learn More</button>
+        </a>
     </div>
 
     <footer>
