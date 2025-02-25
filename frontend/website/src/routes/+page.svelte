@@ -67,7 +67,7 @@
 
         background-color: #0066cc;
         color: white;
-        padding: 10px 60px;
+        padding: 10px 0px;
         border-radius: 10px;
         text-decoration: none ;
         font-weight: bold;
@@ -76,6 +76,22 @@
     }
 
     .btn:hover {
+        background-color: #004d99;
+    }
+    .btnTwo {
+
+
+        background-color: #0066cc;
+        color: white;
+        padding: 10px 0px;
+        border-radius: 10px;
+        text-decoration: none ;
+        font-weight: bold;
+        position: relative;
+        top: 50px;
+    }
+
+    .btnTwo:hover {
         background-color: #004d99;
     }
 </style>
@@ -95,6 +111,9 @@
 
         <a href="/learn-more" class="btn">
             <button>Learn More</button>
+        </a>
+        <a href="/login" class="btnTwo">
+            <button>Login</button>
         </a>
     </div>
 
