@@ -40,7 +40,7 @@ impl Blockchain {
         else if elapsed > self.target_timestamp {
             self.difficulty = self.difficulty.saturating_sub(1);
         }
-
+        println!("Difficulty: {}", self.difficulty);
         return self.difficulty;
     }
     pub fn mine_pending_transactions(&mut self, miner_address: String) {

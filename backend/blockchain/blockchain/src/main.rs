@@ -30,9 +30,13 @@ fn main() {
 
     let transaction = Transaction::new(&test1_pub, &test2_pub, 10.0, &test1_keys);
 
+    let transaction2 = Transaction::new(&test2_pub, &test1_pub, 10.0, &test2_keys);
+
     blockchain.create_transaction(transaction);
     blockchain.mine_pending_transactions(test1_pub.clone());
 
+    blockchain.create_transaction(transaction2);
+    blockchain.mine_pending_transactions(test2_pub.clone());
     println!("Blockchain: {:?}", blockchain.chain);
 }
 
