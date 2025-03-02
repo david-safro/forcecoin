@@ -1,6 +1,5 @@
 <script>
-    export let forcecoinPrice;
-    export let description;
+    export let data;
 </script>
 
 <style>
@@ -80,10 +79,10 @@
 
     <div class="forcecoin-section">
         <h2>Forcecoin Price</h2>
-        <div class="price">{forcecoinPrice}</div>
+        <div class="price">{data.forcecoinPrice}</div>
         <h3>What is Forcecoin?</h3>
         <div class="description">
-            {description}
+            {data.description}
         </div>
 
         <a href="/learn-more" class="btn">Learn More</a>
