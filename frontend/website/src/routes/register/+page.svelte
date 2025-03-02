@@ -1,20 +1,25 @@
 <script>
+    let name = '';
     let email = '';
     let password = '';
     let error = '';
+    let isLoading = false;
 
-    async function handleLogin() {
-        const res = await fetch('/api/login', {
+    async function handleRegister() {
+        isLoading = true;
+
+        const res = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ name, email, password })
         });
 
         const data = await res.json();
         if (res.ok) {
-            window.location.href = '/';
+            window.location.href = '/login';
         } else {
             error = data.error;
+            isLoading = false;
         }
     }
 </script>
@@ -39,7 +44,7 @@
         font-weight: bold;
     }
 
-    .login-container {
+    .register-container {
         background-color: white;
         padding: 40px;
         margin-top: 20px;
@@ -76,6 +81,11 @@
         background-color: #004d99;
     }
 
+    .btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
     .error {
         color: red;
         margin-top: 10px;
@@ -84,13 +94,14 @@
 
 <main>
     <header>
-        Login
+        Register
     </header>
 
-    <div class="login-container">
-        <h2>Welcome Back</h2>
-        <p>Please enter your credentials</p>
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        <p>Join us today!</p>
 
+        <input type="text" placeholder="Name" bind:value={name} />
         <input type="email" placeholder="Email" bind:value={email} />
         <input type="password" placeholder="Password" bind:value={password} />
 
@@ -98,8 +109,11 @@
             <p class="error">{error}</p>
         {/if}
 
-        <button class="btn" on:click={handleLogin}>Login</button>
+        <button class="btn" on:click={handleRegister} disabled={isLoading}>
+            {isLoading ? 'Registering...' : 'Register'}
+        </button>
 
-        <p>Don't have an account? <a href="/register">Register here</a></p>
+        <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
 </main>
+
