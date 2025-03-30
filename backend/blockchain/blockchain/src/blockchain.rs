@@ -1,16 +1,17 @@
 use crate::block::Block;
 use crate::transaction::Transaction;
-
+use crate::coin::Coin;
 pub struct Blockchain {
     pub chain: Vec<Block>,
     pub difficulty: usize,
     pub pending_transactions: Vec<Transaction>,
     pub mining_reward: f64,
     pub target_timestamp: u64,
+    pub coin: Coin,
 }
 
 impl Blockchain {
-    pub fn new(difficulty: usize, mining_reward: f64) -> Self {
+    pub fn new(difficulty: usize, mining_reward: f64, coin: Coin) -> Self {
         let mut chain = Vec::new();
         let genesis_block = Block::new(0, vec![], "0".to_string());
         chain.push(genesis_block);
@@ -20,6 +21,7 @@ impl Blockchain {
             pending_transactions: Vec::new(),
             mining_reward,
             target_timestamp: 300,
+            coin
         }
     }
 

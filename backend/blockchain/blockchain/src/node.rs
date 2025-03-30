@@ -3,14 +3,14 @@ use std::sync::{Arc, Mutex};
 use std::net::{TcpListener, TcpStream};
 use std::io::{Read, Write};
 use std::thread;
-
+use crate::coin::Coin;
 pub struct Node {
     pub blockchain: Arc<Mutex<Blockchain>>,
 }
 
 impl Node {
     pub fn new() -> Self {
-        let blockchain = Arc::new(Mutex::new(Blockchain::new(2, 3.0)));
+        let blockchain = Arc::new(Mutex::new(Blockchain::new(2, 3.0, Coin::new()))); //does this create a flaw?
         Node { blockchain }
     }
 

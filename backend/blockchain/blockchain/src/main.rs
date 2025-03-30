@@ -9,7 +9,7 @@ use blockchain::Blockchain;
 use transaction::Transaction;
 use ring::signature::{Ed25519KeyPair, KeyPair};
 use ring::rand::SystemRandom;
-
+use coin::Coin;
 
 fn generate_keys() -> (String, Ed25519KeyPair) {
     let rng = SystemRandom::new();
@@ -21,7 +21,8 @@ fn generate_keys() -> (String, Ed25519KeyPair) {
 }
 
 fn main() {
-    let mut blockchain = Blockchain::new(4, 50.0);
+    let coin = Coin::new();
+    let mut blockchain = Blockchain::new(4, 50.0, coin);
     let (test1_pub, test1_keys) = generate_keys();
     let (test2_pub,test2_keys) = generate_keys();
 

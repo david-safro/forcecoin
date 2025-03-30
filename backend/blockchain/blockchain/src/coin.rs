@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use crate::Transaction;
 use ring::signature::{Ed25519KeyPair, KeyPair};
 use ring::rand::SystemRandom;
-struct Coin {
+pub struct Coin {
     name: String,
     ticker : String,
     amount: u64,
@@ -15,7 +15,7 @@ struct User{
     wallet : Wallet,
 }
 impl Coin {
-    fn new() -> Self {
+    pub fn new() -> Self {
         let total = 1000000 * 10u64.pow(8);
         Coin {
             name: "ForceCoin".to_string(),
