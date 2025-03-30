@@ -7,22 +7,55 @@
 
     async function handleRegister() {
         isLoading = true;
+        error = '';
 
-        const res = await fetch('/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password })
-        });
+        try {
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
 
-        const data = await res.json();
-        if (res.ok) {
-            window.location.href = '/login';
-        } else {
-            error = data.error;
+            const data = await res.json();
+
+            if (res.ok) {
+                window.location.href = '/login';
+            } else {
+                error = data.error || 'Registration failed';
+            }
+        } catch (err) {
+            console.error('Unexpected error:', err);
+            error = 'Something went wrong. Please try again.';
+        } finally {
             isLoading = false;
         }
     }
 </script>
+
+<main>
+    <header>
+        Register
+    </header>
+
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        <p>Join us today!</p>
+
+        <input type="text" placeholder="Name" bind:value={name} />
+        <input type="email" placeholder="Email" bind:value={email} />
+        <input type="password" placeholder="Password" bind:value={password} />
+
+        {#if error}
+            <p class="error">{error}</p>
+        {/if}
+
+        <button class="btn" on:click={handleRegister} disabled={isLoading}>
+            {isLoading ? 'Registering...' : 'Register'}
+        </button>
+
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </div>
+</main>
 
 <style>
     * {
@@ -34,6 +67,7 @@
     main {
         text-align: center;
         padding: 20px;
+        font-family: system-ui, sans-serif;
     }
 
     header {
@@ -91,29 +125,3 @@
         margin-top: 10px;
     }
 </style>
-
-<main>
-    <header>
-        Register
-    </header>
-
-    <div class="register-container">
-        <h2>Create an Account</h2>
-        <p>Join us today!</p>
-
-        <input type="text" placeholder="Name" bind:value={name} />
-        <input type="email" placeholder="Email" bind:value={email} />
-        <input type="password" placeholder="Password" bind:value={password} />
-
-        {#if error}
-            <p class="error">{error}</p>
-        {/if}
-
-        <button class="btn" on:click={handleRegister} disabled={isLoading}>
-            {isLoading ? 'Registering...' : 'Register'}
-        </button>
-
-        <p>Already have an account? <a href="/login">Login here</a></p>
-    </div>
-</main>
-

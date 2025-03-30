@@ -2,22 +2,39 @@
     let email = '';
     let password = '';
     let error = '';
+    let isLoading = false;
 
-    async function handleLogin() {
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-            window.location.href = '/';
-        } else {
-            error = data.error;
-        }
+    export let form;
+    if (form?.error) {
+        error = form.error;
     }
 </script>
+
+<main>
+    <header>
+        Login
+    </header>
+
+    <div class="login-container">
+        <h2>Welcome Back</h2>
+        <p>Please enter your credentials</p>
+
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email" bind:value={email} required />
+            <input type="password" name="password" placeholder="Password" bind:value={password} required />
+
+            {#if error}
+                <p class="error">{error}</p>
+            {/if}
+
+            <button class="btn" type="submit" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
+            </button>
+        </form>
+
+        <p>Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+</main>
 
 <style>
     * {
@@ -29,6 +46,7 @@
     main {
         text-align: center;
         padding: 20px;
+        font-family: system-ui, sans-serif;
     }
 
     header {
@@ -81,25 +99,3 @@
         margin-top: 10px;
     }
 </style>
-
-<main>
-    <header>
-        Login
-    </header>
-
-    <div class="login-container">
-        <h2>Welcome Back</h2>
-        <p>Please enter your credentials</p>
-
-        <input type="email" placeholder="Email" bind:value={email} />
-        <input type="password" placeholder="Password" bind:value={password} />
-
-        {#if error}
-            <p class="error">{error}</p>
-        {/if}
-
-        <button class="btn" on:click={handleLogin}>Login</button>
-
-        <p>Don't have an account? <a href="/register">Register here</a></p>
-    </div>
-</main>

@@ -23,9 +23,12 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@prisma/client": "^6.4.1",
+		"@prisma/client": "^6.5.0",
+		"apexcharts": "^4.5.0",
 		"bcrypt": "^5.1.1",
 		"bcryptjs": "^3.0.2",
-		"express": "^4.21.2"
+		"express": "^4.21.2",
+		"lucide-svelte": "^0.485.0",
+		"svelte-apexcharts": "^1.0.2"
 	}
 }
