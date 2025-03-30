@@ -30,3 +30,4 @@ impl Transaction {
         public_key.verify(data.as_bytes(), &hex::decode(&self.signature).unwrap()).is_ok()
     }
 }
+
