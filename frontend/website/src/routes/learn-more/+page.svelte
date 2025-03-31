@@ -1,5 +1,5 @@
 <script>
-    export let forcecoinDetails = "We Will Add More Later";
+    export let forcecoinDetails = "Welcome to ForceCoin. ForceCoin is a state-of-the-art new cryptocurrency with a complete security guarantee. We provide a decentralized P2P architecture with stunningly strong security guarantees.";
 </script>
 
 <style>
