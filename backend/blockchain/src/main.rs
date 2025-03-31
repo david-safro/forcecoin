@@ -5,14 +5,15 @@ mod p2p;
 mod node;
 mod coin;
 mod wallet;
-mod cli;
 
 use blockchain::Blockchain;
 use transaction::Transaction;
 use node::Node;
 use wallet::{WalletManager, WalletError};
 use std::env;
-use std::thread;
+use std::fs::File;
+use std::io::{Read, Write};
+use std::thread;  // Added explicit import for thread
 use std::time::Duration;
 use std::sync::{Arc, Mutex};
 
@@ -140,16 +141,8 @@ fn main() {
                 }
             };
 
-            // Create a transaction - using old style without Result for compatibility
-            let transaction = Transaction {
-                sender: wallet.address,
-                receiver: recipient.to_string(),
-                amount,
-                signature: "".to_string(), // Will be set below
-                timestamp: chrono::Utc::now().timestamp() as u64,
-                fee: 0.0,                 // Default fee
-                nonce: 0,                 // Default nonce
-            };
+            // Create a transaction
+            let transaction = Transaction::new(&wallet.address, recipient, amount, &key_pair);
 
             // Connect to node and send transaction
             if let Ok(mut stream) = std::net::TcpStream::connect(node_address) {
@@ -273,7 +266,7 @@ fn main() {
                 match stream.read(&mut buffer) {
                     Ok(bytes_read) => {
                         let response = String::from_utf8_lossy(&buffer[..bytes_read]);
-                        println!("Balance for wallet '{}': {}", wallet_label, response);
+                        println!("Balance for wallet '{}': {} FCN", wallet_label, response);
                     },
                     Err(e) => println!("Failed to read response: {:?}", e),
                 }
@@ -318,6 +311,87 @@ fn main() {
                 println!("Failed to connect to node at {}", node_address);
             }
         },
+        "get-block" => {
+            if args.len() < 4 {
+                println!("Usage: {} get-block <block_index> <node_address>", args[0]);
+                return;
+            }
+
+            let block_index = match args[2].parse::<usize>() {
+                Ok(idx) => idx,
+                Err(_) => {
+                    println!("Invalid block index: must be a number");
+                    return;
+                }
+            };
+            let node_address = &args[3];
+
+            // Connect to node and request block info
+            if let Ok(mut stream) = std::net::TcpStream::connect(node_address) {
+                use std::io::{Read, Write};
+
+                let message = format!("GET_BLOCK {}", block_index);
+
+                if let Err(e) = stream.write(message.as_bytes()) {
+                    println!("Failed to send block request: {:?}", e);
+                    return;
+                }
+
+                if let Err(e) = stream.flush() {
+                    println!("Failed to flush stream: {:?}", e);
+                    return;
+                }
+
+                // Read response
+                let mut buffer = [0; 8192];
+                match stream.read(&mut buffer) {
+                    Ok(bytes_read) => {
+                        let response = String::from_utf8_lossy(&buffer[..bytes_read]);
+                        println!("Block #{}:\n{}", block_index, response);
+                    },
+                    Err(e) => println!("Failed to read response: {:?}", e),
+                }
+            } else {
+                println!("Failed to connect to node at {}", node_address);
+            }
+        },
+        "get-pending" => {
+            if args.len() < 3 {
+                println!("Usage: {} get-pending <node_address>", args[0]);
+                return;
+            }
+
+            let node_address = &args[2];
+
+            // Connect to node and request pending transactions
+            if let Ok(mut stream) = std::net::TcpStream::connect(node_address) {
+                use std::io::{Read, Write};
+
+                let message = "GET_PENDING";
+
+                if let Err(e) = stream.write(message.as_bytes()) {
+                    println!("Failed to send pending transactions request: {:?}", e);
+                    return;
+                }
+
+                if let Err(e) = stream.flush() {
+                    println!("Failed to flush stream: {:?}", e);
+                    return;
+                }
+
+                // Read response
+                let mut buffer = [0; 8192];
+                match stream.read(&mut buffer) {
+                    Ok(bytes_read) => {
+                        let response = String::from_utf8_lossy(&buffer[..bytes_read]);
+                        println!("Pending Transactions:\n{}", response);
+                    },
+                    Err(e) => println!("Failed to read response: {:?}", e),
+                }
+            } else {
+                println!("Failed to connect to node at {}", node_address);
+            }
+        },
         _ => {
             print_usage();
         }
@@ -325,12 +399,20 @@ fn main() {
 }
 
 fn print_usage() {
+    println!("ForceCoin - A Simple Blockchain Cryptocurrency");
+    println!("----------------------------------------------");
     println!("Usage:");
-    println!("  blockchain start-node <listen_address> [peer1] [peer2] ...");
-    println!("  blockchain create-wallet <label>");
-    println!("  blockchain list-wallets");
-    println!("  blockchain send <wallet_label> <recipient_address> <amount> <node_address>");
-    println!("  blockchain mine <wallet_label> <node_address>");
-    println!("  blockchain get-balance <wallet_label> <node_address>");
-    println!("  blockchain blockchain-stats <node_address>");
+    println!("  Node Management:");
+    println!("    start-node <listen_address> [peer1] [peer2] ...  - Start a blockchain node");
+    println!("  Wallet Management:");
+    println!("    create-wallet <label>                           - Create a new wallet");
+    println!("    list-wallets                                    - List all wallets");
+    println!("    get-balance <wallet_label> <node_address>       - Get wallet balance");
+    println!("  Transaction Operations:");
+    println!("    send <wallet_label> <recipient> <amount> <node> - Send coins to an address");
+    println!("    mine <wallet_label> <node_address>              - Mine pending transactions");
+    println!("  Blockchain Information:");
+    println!("    blockchain-stats <node_address>                 - Show blockchain statistics");
+    println!("    get-block <block_index> <node_address>          - Show details of a block");
+    println!("    get-pending <node_address>                      - Show pending transactions");
 }
