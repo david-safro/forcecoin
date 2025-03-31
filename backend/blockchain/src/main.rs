@@ -15,7 +15,7 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::thread;  // Added explicit import for thread
 use std::time::Duration;
-use std::sync::{Arc, Mutex};
+
 
 const DB_PATH: &str = "blockchain.db";
 

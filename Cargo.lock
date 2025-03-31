@@ -227,6 +227,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
 
 [[package]]
+name = "forcecoin"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "clap",
+ "colored",
+ "hex",
+ "rand",
+ "rayon",
+ "ring",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -590,23 +607,6 @@ name = "unicode-ident"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a5f39404a5da50712a4c1eecf25e90dd62b613502b7e925fd4e4d19b5c96512"
-
-[[package]]
-name = "untitled1"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "clap",
- "colored",
- "hex",
- "rand",
- "rayon",
- "ring",
- "rusqlite",
- "serde",
- "serde_json",
- "thiserror",
-]
 
 [[package]]
 name = "untrusted"

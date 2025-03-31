@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use ring::rand::SystemRandom;
 use ring::signature::{Ed25519KeyPair, KeyPair};
 use serde::{Deserialize, Serialize};
-use rusqlite::{params, Connection, Result as SqliteResult};
+use rusqlite::{params, Connection};
 use thiserror::Error;
 
 #[derive(Debug, Error)]

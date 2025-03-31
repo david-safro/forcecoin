@@ -4,7 +4,7 @@ use chrono::Utc;
 use ring::digest::{Context, SHA256};
 use hex;
 use thiserror::Error;
-use std::time::{Duration, Instant};
+
 use rayon::prelude::*;
 #[derive(Debug, Error)]
 pub enum BlockError {
@@ -113,6 +113,7 @@ impl Block {
         let start_time = std::time::Instant::now();
         let timeout = std::time::Duration::from_secs(300); // 5 minute timeout
 
+        self.transactions.retain(|transactions| transactions.verify());
         // Sequential mining implementation (remove parallel code for now)
         let mut nonce = 0u64;
 
