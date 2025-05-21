@@ -34,6 +34,9 @@
 
         <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
+    <div>
+        <a href="/" class="btn">Back to Homepage</a>
+    </div>
 </main>
 
 <style>

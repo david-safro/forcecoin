@@ -55,6 +55,9 @@
 
         <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
+    <div>
+        <a href="/" class="btn">Back to Homepage</a>
+    </div>
 </main>
 
 <style>
