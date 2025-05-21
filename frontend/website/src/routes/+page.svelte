@@ -9,7 +9,7 @@
 
 <main>
     <header>
-        Forcecoin Homepage
+        Forcecoin
     </header>
 
     {#if data.user}

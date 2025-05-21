@@ -16,6 +16,9 @@ export const actions = {
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!password) {
+            return fail(400, {error: 'Password is required'});
+        }
         if (!passwordMatch) {
             return fail(400, { error: 'Invalid email or password' });
         }

@@ -13,7 +13,9 @@
     <button on:click={() => handleClick('Sell')}>
         Sell
     </button>
-
+    <button on:click={() => handleClick('Mine')}>
+        Mine
+    </button>
     {#if showMessage}
         <div class="popup">{showMessage}</div>
     {/if}
