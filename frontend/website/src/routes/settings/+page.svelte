@@ -6,9 +6,11 @@
     let blockchainStats = null;
     let isLoadingStats = false;
     let isStartingNode = false;
-    let userWalletInfo = null;
     let message = '';
 
+    /**
+     * @param {string} action
+     */
     async function callBlockchainAPI(action, params = {}) {
         const response = await fetch('/api/blockchain', {
             method: 'POST',
@@ -16,6 +18,32 @@
             body: JSON.stringify({ action, ...params })
         });
         return await response.json();
+    }
+
+    async function startNode() {
+        isStartingNode = true;
+        message = 'Starting blockchain node...';
+
+        try {
+            const result = await callBlockchainAPI('start_node');
+            if (result.success) {
+                //nodeStatus = 'Online';
+                message = 'Node started successfully!';
+                // Wait a moment then refresh stats
+                setTimeout(() => {
+                    fetchBlockchainStats();
+                    message = '';
+                }, 2000);
+            } else {
+                //nodeStatus = 'Offline';
+                message = `Failed to start node: ${result.error}`;
+            }
+        } catch (error) {
+            message = 'Failed to start node';
+        } finally {
+            isStartingNode = false;
+            setTimeout(() => message = '', 5000);
+        }
     }
 
     async function fetchBlockchainStats() {
@@ -38,30 +66,6 @@
         }
     }
 
-    async function startNode() {
-        isStartingNode = true;
-        message = 'Starting blockchain node...';
-
-        try {
-            const result = await callBlockchainAPI('start_node');
-            if (result.success) {
-                message = 'Node started successfully!';
-                // Wait a moment then refresh stats
-                setTimeout(() => {
-                    fetchBlockchainStats();
-                    message = '';
-                }, 2000);
-            } else {
-                message = `Failed to start node: ${result.error}`;
-            }
-        } catch (error) {
-            message = 'Failed to start node';
-        } finally {
-            isStartingNode = false;
-            setTimeout(() => message = '', 5000);
-        }
-    }
-
     async function createUserWallet() {
         try {
             const result = await callBlockchainAPI('create_wallet');
@@ -74,6 +78,9 @@
         }
     }
 
+    /**
+     * @param {null} statsString
+     */
     function parseStats(statsString) {
         if (!statsString || statsString === 'Node offline') return null;
 
@@ -125,8 +132,6 @@
                         {nodeStatus}
                         {#if nodeStatus === 'Online'}
                             🟢
-                        {:else}
-                            🔴
                         {/if}
                     </span>
                 </div>

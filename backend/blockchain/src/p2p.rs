@@ -237,7 +237,7 @@ impl P2P {
                             chain.pending_transactions.push(reward_transaction);
 
                             // Mine block with all pending transactions (including the reward)
-                            chain.mine_pending_transactions(miner_address);
+                            let _ = chain.mine_pending_transactions(miner_address);
 
                             "Block mined successfully".to_string()
                         } else {

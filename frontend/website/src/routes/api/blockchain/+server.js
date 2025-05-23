@@ -3,11 +3,14 @@ import { json } from '@sveltejs/kit';
 import { spawn } from 'child_process';
 import { promisify } from 'util';
 import net from 'net';
-
-const BLOCKCHAIN_CLI_PATH = '../../../../backend/blockchain/target/release/blockchain.exe'; // Adjust path as needed
+import path from 'path'
+const BLOCKCHAIN_CLI_PATH = '../../../../backend/blockchain/target/release/blockchain.exe'
 const DEFAULT_NODE_ADDRESS = '127.0.0.1:7001';
 
 // Helper function to execute Rust CLI commands
+/**
+ * @param {string[]} args
+ */
 function executeBlockchainCommand(args) {
     return new Promise((resolve, reject) => {
         const process = spawn(BLOCKCHAIN_CLI_PATH, args);
@@ -37,12 +40,16 @@ function executeBlockchainCommand(args) {
 }
 
 // Helper function to communicate with blockchain node via TCP
+/**
+ * @param {string} command
+ * @param nodeAddress
+ */
 function sendNodeCommand(command, nodeAddress = DEFAULT_NODE_ADDRESS) {
     return new Promise((resolve, reject) => {
         const client = new net.Socket();
         let response = '';
 
-        client.connect(nodeAddress.split(':')[1], nodeAddress.split(':')[0], () => {
+        client.connect(parseInt(nodeAddress.split(':')[1], 10), nodeAddress.split(':')[0], () => {
             client.write(command);
         });
 

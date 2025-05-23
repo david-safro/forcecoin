@@ -17,5 +17,5 @@ clap = { version = "4.4", features = ["derive"] }
 colored = "2.0"
 
 [[bin]]
-name = "forcecoin"
-path = "backend/blockchain/src/main.rs"
+name = "blockchain"
+path = "/backend/blockchain/src/main.rs"
