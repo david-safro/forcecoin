@@ -3,8 +3,13 @@ import { json } from '@sveltejs/kit';
 import { spawn } from 'child_process';
 import { promisify } from 'util';
 import net from 'net';
-import path from 'path'
-const BLOCKCHAIN_CLI_PATH = '../../../../backend/blockchain/target/release/blockchain.exe'
+import path from 'path';
+
+// Fix the path - from frontend/website/ to project root target directory
+const BLOCKCHAIN_CLI_PATH = process.platform === 'win32'
+    ? '../../target/release/blockchain.exe'  // Windows
+    : '../../target/release/blockchain';     // Linux/Mac
+
 const DEFAULT_NODE_ADDRESS = '127.0.0.1:7001';
 
 // Helper function to execute Rust CLI commands
